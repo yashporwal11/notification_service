@@ -22,6 +22,7 @@ import java.util.Date;
 public class EsSearchTime {
 
     private static final int DEFAULT_PAGE_SIZE = 100;
+    private static final int DEFAULT_PAGE_NUMBER = 1;
 
     @JsonProperty("phone_number")
     @Pattern(regexp = "^((\\+){1}91){1}[1-9]{1}[0-9]{9}$", message = "phone_number should start with +91 and should have 10 more digits")
@@ -43,14 +44,16 @@ public class EsSearchTime {
     private SortOrder sortOrder;
 
     @JsonProperty("page_number")
-    @Positive(message = "page_number should be a positive integer")
     private int pageNumber;
 
     @JsonProperty("page_size")
-    @Positive(message = "page_size should be a positive integer")
     private int pageSize;
 
     public int getPageSize(){
         return (pageSize != 0 ? pageSize : DEFAULT_PAGE_SIZE);
+    }
+
+    public int getPageNumber() {
+        return (pageNumber != 0 ? pageNumber : DEFAULT_PAGE_NUMBER);
     }
 }

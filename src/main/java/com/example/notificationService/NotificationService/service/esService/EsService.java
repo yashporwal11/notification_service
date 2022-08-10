@@ -3,8 +3,10 @@ package com.example.notificationService.NotificationService.service.esService;
 import com.example.notificationService.NotificationService.entity.es.EsData;
 import com.example.notificationService.NotificationService.entity.es.EsSearchText;
 import com.example.notificationService.NotificationService.entity.es.EsSearchTime;
+import com.example.notificationService.NotificationService.exception.InvalidRequestException;
 import com.example.notificationService.NotificationService.exception.NotFoundException;
 import com.example.notificationService.NotificationService.repository.EsRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -20,6 +22,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +55,14 @@ public class EsService {
             int size = esSearchText.getPageSize();
             int from = page <= 0 ? 0 : (page-1) * size;
 
+            if(page<=0){
+                throw new InvalidRequestException("page_number should be a positive integer");
+            }
+
+            if(size <=0){
+                throw new InvalidRequestException("page_size should be a positive integer");
+            }
+
             QueryBuilder textQuery = QueryBuilders.matchQuery("message",esSearchText.getSearchText()).operator(Operator.AND);
             SearchSourceBuilder builder = new SearchSourceBuilder().from(from).size(size).query(textQuery);
 
@@ -80,23 +91,37 @@ public class EsService {
             }
             return esDataReceived;
         }
-        catch (Exception e)
+        catch (NotFoundException e)
         {
             throw new NotFoundException(e.getMessage());
+        }
+        catch (InvalidRequestException e){
+            throw new InvalidRequestException(e.getMessage());
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public List<EsData> searchByTime(EsSearchTime esSearchTime){
         try {
+            int page = esSearchTime.getPageNumber();
+            int size = esSearchTime.getPageSize();
+            int from = page <= 0 ? 0 : (page-1) * size;
+
+            if(page<=0){
+                throw new InvalidRequestException("page_number should be a positive integer");
+            }
+
+            if(size <=0){
+                throw new InvalidRequestException("page_size should be a positive integer");
+            }
+
             QueryBuilder searchQuery = QueryBuilders.termQuery("phoneNumber", esSearchTime.getPhoneNumber());
             QueryBuilder dateQuery = QueryBuilders.rangeQuery("createdAt").gte(esSearchTime.getStartTime()).lte(esSearchTime.getEndTime());
             BoolQueryBuilder boolQuery = new BoolQueryBuilder();
             boolQuery.filter(searchQuery);
             boolQuery.filter(dateQuery);
-
-            int page = esSearchTime.getPageNumber();
-            int size = esSearchTime.getPageSize();
-            int from = page <= 0 ? 0 : (page-1) * size;
 
             SearchSourceBuilder builder = new SearchSourceBuilder().from(from).size(size).query(boolQuery);
 
@@ -125,9 +150,15 @@ public class EsService {
             }
             return esDataReceived;
         }
-        catch (Exception e)
+        catch (NotFoundException e)
         {
             throw new NotFoundException(e.getMessage());
+        }
+        catch (InvalidRequestException e){
+            throw new InvalidRequestException(e.getMessage());
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

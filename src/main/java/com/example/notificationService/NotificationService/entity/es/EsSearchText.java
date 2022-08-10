@@ -10,6 +10,7 @@ import org.elasticsearch.search.sort.SortOrder;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Data
@@ -18,6 +19,7 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 public class EsSearchText {
     private static final int DEFAULT_PAGE_SIZE = 100;
+    private static final int DEFAULT_PAGE_NUMBER = 1;
 
     @JsonProperty("search_text")
     private String searchText;
@@ -30,14 +32,16 @@ public class EsSearchText {
     private SortOrder sortOrder;
 
     @JsonProperty("page_number")
-    @Positive(message = "page_number should be a positive integer")
     private int pageNumber;
 
     @JsonProperty("page_size")
-    @Positive(message = "page_size should be a positive integer")
     private int pageSize;
 
     public int getPageSize(){
         return (pageSize != 0 ? pageSize : DEFAULT_PAGE_SIZE);
+    }
+
+    public int getPageNumber() {
+        return (pageNumber != 0 ? pageNumber : DEFAULT_PAGE_NUMBER);
     }
 }
