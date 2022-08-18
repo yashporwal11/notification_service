@@ -2,7 +2,8 @@ package com.example.notificationService.NotificationService.constant;
 
 public class ElasticsearchConstants {
 
-    public static final String SEARCH_BY_TEXT_ENDPOINT = "/es/search_text";
-    public static final String SEARCH_BY_TIME_ENDPOINT = "/es/search_time";
-
+    public static final String SEARCH_BY_TEXT_ENDPOINT = "/v1/search_text";
+    public static final String SEARCH_BY_TIME_ENDPOINT = "/v1/search_time";
+    public static final int DEFAULT_PAGE_SIZE = 5;
+    public static final int DEFAULT_PAGE_NUMBER = 1;
 }

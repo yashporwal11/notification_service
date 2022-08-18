@@ -1,5 +1,6 @@
 package com.example.notificationService.NotificationService.entity.es;
 
+import com.example.notificationService.NotificationService.constant.ElasticsearchConstants;
 import com.example.notificationService.NotificationService.entity.enums.SortByType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -18,8 +19,6 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EsSearchText {
-    private static final int DEFAULT_PAGE_SIZE = 100;
-    private static final int DEFAULT_PAGE_NUMBER = 1;
 
     @JsonProperty("search_text")
     private String searchText;
@@ -38,10 +37,10 @@ public class EsSearchText {
     private int pageSize;
 
     public int getPageSize(){
-        return (pageSize != 0 ? pageSize : DEFAULT_PAGE_SIZE);
+        return (pageSize != 0 ? pageSize : ElasticsearchConstants.DEFAULT_PAGE_SIZE);
     }
 
     public int getPageNumber() {
-        return (pageNumber != 0 ? pageNumber : DEFAULT_PAGE_NUMBER);
+        return (pageNumber != 0 ? pageNumber : ElasticsearchConstants.DEFAULT_PAGE_NUMBER);
     }
 }

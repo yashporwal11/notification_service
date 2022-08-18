@@ -6,10 +6,10 @@ public enum SortByType {
     PHONE_NUMBER("phoneNumber"),
     MESSAGE("message.raw"),
     CREATED_AT("createdAt");
+
     public String value;
 
     SortByType (String value){
         this.value = value;
     }
-
 }

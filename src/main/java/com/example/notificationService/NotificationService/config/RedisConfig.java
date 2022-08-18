@@ -1,5 +1,6 @@
 package com.example.notificationService.NotificationService.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,11 +17,16 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @EnableCaching
 public class RedisConfig {
 
+    @Value("${redis.host-name}")
+    private String redisHostName;
+    @Value("${redis.port}")
+    private int redisPort;
+
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        redisStandaloneConfiguration.setHostName("127.0.0.1");
-        redisStandaloneConfiguration.setPort(6379);
+        redisStandaloneConfiguration.setHostName(redisHostName);
+        redisStandaloneConfiguration.setPort(redisPort);
 
         JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisStandaloneConfiguration);
         return  jedisConnectionFactory;

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class EsDataTransformer {
     public EsData transform(Sms sms){
-        return new EsData(sms.getId(),sms.getPhoneNumber(), sms.getMessage(), sms.getCreatedAt());
+        return EsData.builder().id(sms.getId()).phoneNumber(sms.getPhoneNumber()).message(sms.getMessage()).createdAt(sms.getCreatedAt()).build();
     }
 }

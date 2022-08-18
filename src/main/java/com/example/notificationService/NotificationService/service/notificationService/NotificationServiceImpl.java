@@ -1,35 +1,32 @@
 package com.example.notificationService.NotificationService.service.notificationService;
 
+import com.example.notificationService.NotificationService.constant.ResponseConstants;
+import com.example.notificationService.NotificationService.entity.enums.StatusType;
+import com.example.notificationService.NotificationService.entity.imi.ImiResponse;
 import com.example.notificationService.NotificationService.entity.kafka.KafkaData;
 import com.example.notificationService.NotificationService.entity.notificationService.Sms;
 import com.example.notificationService.NotificationService.exception.NotFoundException;
 import com.example.notificationService.NotificationService.repository.NotificationServiceRepository;
 import com.example.notificationService.NotificationService.request.SmsRequest;
+import com.example.notificationService.NotificationService.response.SmsResponse;
 import com.example.notificationService.NotificationService.service.kafkaService.KafkaProducer;
 import com.example.notificationService.NotificationService.transformer.KafkaDataTransformer;
 import com.example.notificationService.NotificationService.transformer.SmsTransformer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NotificationServiceImpl implements NotificationService{
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class NotificationServiceImpl implements NotificationService {
 
-    @Autowired
-    private NotificationServiceRepository notificationServiceRepository;
-
-    @Autowired
-    private KafkaProducer kafkaProducer;
-
-    @Autowired
-    private SmsTransformer smsTransformer;
-
-    @Autowired
-    private KafkaDataTransformer kafkaDataTransformer;
-
-    public NotificationServiceImpl(){}
+    private final NotificationServiceRepository notificationServiceRepository;
+    private final KafkaProducer kafkaProducer;
+    private final SmsTransformer smsTransformer;
+    private final KafkaDataTransformer kafkaDataTransformer;
 
     @Override
-    public Sms sendSMS(SmsRequest smsRequest) {
+    public SmsResponse sendSMS(SmsRequest smsRequest) {
 
         //transform smsRequest to Sms
         Sms sms = smsTransformer.transform(smsRequest);
@@ -41,7 +38,7 @@ public class NotificationServiceImpl implements NotificationService{
         KafkaData kafkaData = kafkaDataTransformer.transform(sms);
         kafkaProducer.sendMessage(kafkaData);
 
-        return sms;
+        return SmsResponse.builder().comments(ResponseConstants.SUCCESSFULLY_SENT).requestId(sms.getRequestId()).build();
     }
 
     @Override
@@ -49,9 +46,10 @@ public class NotificationServiceImpl implements NotificationService{
 
         Sms sms = notificationServiceRepository.findByRequestId(requestId);
 
-        if(sms==null){
+        if (sms == null) {
             throw new NotFoundException("request_id not found");
         }
+
         return sms;
     }
 
@@ -60,4 +58,23 @@ public class NotificationServiceImpl implements NotificationService{
         return notificationServiceRepository.save(sms);
     }
 
+    @Override
+    public Sms updateSmsFromImiResponse(Sms sms, ImiResponse imiResponse) {
+
+        sms.setFailureCode(imiResponse.getResponse().get(0).getCode());
+        sms.setFailureComments(imiResponse.getResponse().get(0).getDescription());
+        sms.setStatus(StatusType.PROCESSED);
+
+        return this.updateSms(sms);
+    }
+
+    @Override
+    public void updateSmsToBlacklisted(Sms sms) {
+
+        sms.setStatus(StatusType.BLACKLISTED);
+        sms.setFailureCode("1000");
+        sms.setFailureComments("phone_number is blacklisted");
+
+        this.updateSms(sms);
+    }
 }

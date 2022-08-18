@@ -6,7 +6,10 @@ import com.example.notificationService.NotificationService.entity.es.EsSearchTex
 import com.example.notificationService.NotificationService.entity.es.EsSearchTime;
 import com.example.notificationService.NotificationService.response.GenericResponse;
 import com.example.notificationService.NotificationService.service.esService.EsService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,17 +17,16 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Slf4j
 public class EsController {
 
     private final EsService esService;
 
-    @Autowired
-    public EsController(EsService esService){
-        this.esService = esService;
-    }
-
-    @GetMapping(ElasticsearchConstants.SEARCH_BY_TEXT_ENDPOINT)
+    @GetMapping(value = ElasticsearchConstants.SEARCH_BY_TEXT_ENDPOINT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity searchByText(@Valid @RequestBody EsSearchText esSearchText){
+
+        log.info("EsSearchText received is: " + esSearchText);
 
         List<EsData> esData = esService.searchByText(esSearchText);
 
@@ -34,8 +36,10 @@ public class EsController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping(ElasticsearchConstants.SEARCH_BY_TIME_ENDPOINT)
+    @GetMapping(value = ElasticsearchConstants.SEARCH_BY_TIME_ENDPOINT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity searchByTime(@Valid @RequestBody EsSearchTime esSearchTime){
+
+        log.info("EsSearchTime received is: " + esSearchTime);
 
         List<EsData> esData = esService.searchByTime(esSearchTime);
 
@@ -44,5 +48,4 @@ public class EsController {
 
         return ResponseEntity.ok().body(response);
     }
-
 }

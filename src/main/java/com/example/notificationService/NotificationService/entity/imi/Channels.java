@@ -1,4 +1,4 @@
-package com.example.notificationService.NotificationService.entity.thirdParty;
+package com.example.notificationService.NotificationService.entity.imi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class Channels {
 
     @JsonProperty("sms")
-    private SmsThirdParty smsThirdParty;
+    private SmsImi smsImi;
 }

@@ -40,9 +40,11 @@ public class Sms {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "message")
     private String message;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private StatusType status;
 
     @Column(name = "failure_code")
@@ -60,7 +62,6 @@ public class Sms {
     @UpdateTimestamp
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Date updatedAt;
-
 }
 
 

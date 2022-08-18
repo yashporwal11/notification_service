@@ -14,5 +14,4 @@ public class KafkaData {
 
     @JsonProperty("request_id")
     private String requestId;
-
 }

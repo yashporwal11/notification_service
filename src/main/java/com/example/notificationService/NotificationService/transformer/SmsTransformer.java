@@ -8,12 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SmsTransformer {
     public Sms transform(SmsRequest smsRequest){
-        Sms sms = new Sms();
-
-        sms.setPhoneNumber(smsRequest.getPhoneNumber());
-        sms.setMessage(smsRequest.getMessage());
-        sms.setStatus(StatusType.IN_PROGRESS);
-
-        return sms;
+        return Sms.builder().phoneNumber(smsRequest.getPhoneNumber()).message(smsRequest.getMessage()).status(StatusType.IN_PROGRESS).build();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.notificationService.NotificationService.response;
+package com.example.notificationService.NotificationService.entity.imi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -6,15 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SmsResponse {
+public class ImiResponse {
 
-    @JsonProperty("request_id")
-    private String requestId;
-
-    @JsonProperty("comments")
-    private String comments;
+    @JsonProperty("response")
+    private List<ImiResponseData> response;
 }

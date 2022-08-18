@@ -1,5 +1,6 @@
 package com.example.notificationService.NotificationService.entity.es;
 
+import com.example.notificationService.NotificationService.constant.ElasticsearchConstants;
 import com.example.notificationService.NotificationService.entity.enums.SortByType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,9 +21,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EsSearchTime {
-
-    private static final int DEFAULT_PAGE_SIZE = 100;
-    private static final int DEFAULT_PAGE_NUMBER = 1;
 
     @JsonProperty("phone_number")
     @Pattern(regexp = "^((\\+){1}91){1}[1-9]{1}[0-9]{9}$", message = "phone_number should start with +91 and should have 10 more digits")
@@ -50,10 +48,10 @@ public class EsSearchTime {
     private int pageSize;
 
     public int getPageSize(){
-        return (pageSize != 0 ? pageSize : DEFAULT_PAGE_SIZE);
+        return (pageSize != 0 ? pageSize : ElasticsearchConstants.DEFAULT_PAGE_SIZE);
     }
 
     public int getPageNumber() {
-        return (pageNumber != 0 ? pageNumber : DEFAULT_PAGE_NUMBER);
+        return (pageNumber != 0 ? pageNumber : ElasticsearchConstants.DEFAULT_PAGE_NUMBER);
     }
 }

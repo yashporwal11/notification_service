@@ -1,16 +1,17 @@
 package com.example.notificationService.NotificationService.service.blacklistService;
 
 import com.example.notificationService.NotificationService.repository.BlacklistRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BlacklistServiceImpl implements BlacklistService{
 
-    @Autowired
-    private BlacklistRepository blacklistRepository;
+    private final BlacklistRepository blacklistRepository;
 
     @Override
     public void addToBlacklist(String phoneNumber) {

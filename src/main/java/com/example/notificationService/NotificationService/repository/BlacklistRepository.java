@@ -1,5 +1,7 @@
 package com.example.notificationService.NotificationService.repository;
 
+import com.example.notificationService.NotificationService.constant.BlacklistConstants;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -7,12 +9,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BlacklistRepository {
 
-    public static final String HASH_KEY = "PhoneNumber";
+    public static final String HASH_KEY = BlacklistConstants.REDIS_HASH_KEY;
 
-    @Autowired
-    private RedisTemplate template;
+    private final RedisTemplate template;
 
     public void addToBlacklist(String phoneNumber){
         template.opsForHash().put(HASH_KEY,phoneNumber,phoneNumber);
@@ -29,5 +31,4 @@ public class BlacklistRepository {
     public void removeFromBlacklist(String phoneNumber){
         template.opsForHash().delete(HASH_KEY,phoneNumber);
     }
-
 }

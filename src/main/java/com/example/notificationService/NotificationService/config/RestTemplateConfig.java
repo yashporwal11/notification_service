@@ -1,5 +1,6 @@
 package com.example.notificationService.NotificationService.config;
 
+import com.example.notificationService.NotificationService.constant.RestTemplateConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -12,8 +13,8 @@ public class RestTemplateConfig {
     public RestTemplate customRestTemplate()
     {
         HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        httpRequestFactory.setConnectTimeout(5000);
-        httpRequestFactory.setReadTimeout(5000);
+        httpRequestFactory.setConnectTimeout(RestTemplateConstants.CONNECT_TIMEOUT);
+        httpRequestFactory.setReadTimeout(RestTemplateConstants.READ_TIMEOUT);
         return new RestTemplate(httpRequestFactory);
     }
 }

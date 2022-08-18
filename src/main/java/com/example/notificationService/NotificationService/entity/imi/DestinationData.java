@@ -1,4 +1,4 @@
-package com.example.notificationService.NotificationService.entity.thirdParty;
+package com.example.notificationService.NotificationService.entity.imi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class DestinationData {
 
+    @JsonProperty("msisdn")
     private List<String> msisdn;
 
     @JsonProperty("correlationid")

@@ -6,34 +6,40 @@ import com.example.notificationService.NotificationService.request.SmsRequest;
 import com.example.notificationService.NotificationService.response.GenericResponse;
 import com.example.notificationService.NotificationService.response.SmsResponse;
 import com.example.notificationService.NotificationService.service.notificationService.NotificationService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Slf4j
 public class NotificationServiceController {
 
-    @Autowired
-    private NotificationService notificationService;
+    private final NotificationService notificationService;
 
-    @PostMapping(SmsConstants.SEND_SMS_ENDPOINT)
+    @PostMapping(value = SmsConstants.SEND_SMS_ENDPOINT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity sendSMS(@Valid @RequestBody SmsRequest smsRequest){
 
-        Sms sms = notificationService.sendSMS(smsRequest);
+        log.info("SmsRequest received is: " + smsRequest);
+
+        SmsResponse smsResponse = notificationService.sendSMS(smsRequest);
 
         GenericResponse<SmsResponse> response = new GenericResponse<>();
-        SmsResponse data = new SmsResponse();
-        data.setRequestId(sms.getRequestId());
-        data.setComments("Successfully Sent");
-        response.setData(data);
+        response.setData(smsResponse);
 
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping(SmsConstants.GET_SMS_FROM_REQUEST_ID_ENDPINT)
+    @GetMapping(value = SmsConstants.GET_SMS_FROM_REQUEST_ID_ENDPINT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getSmsDetailsFromRequestId(@PathVariable("request_id") String requestId){
+
+        log.info("request_id received is: " + requestId);
+
         Sms sms = notificationService.getSmsDetailsFromRequestId(requestId);
 
         GenericResponse<Sms> response = new GenericResponse<>();
@@ -41,5 +47,4 @@ public class NotificationServiceController {
 
         return ResponseEntity.ok().body(response);
     }
-
 }

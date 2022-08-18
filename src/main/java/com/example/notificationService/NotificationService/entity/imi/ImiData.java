@@ -1,4 +1,4 @@
-package com.example.notificationService.NotificationService.entity.thirdParty;
+package com.example.notificationService.NotificationService.entity.imi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -12,12 +12,14 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ThirdPartyData {
+public class ImiData {
 
     @JsonProperty("deliverychannel")
     private String deliveryChannel;
 
+    @JsonProperty("channels")
     private Channels channels;
 
+    @JsonProperty("destination")
     private List<DestinationData> destination;
 }
