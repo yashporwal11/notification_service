@@ -1,6 +1,7 @@
 package com.example.notificationService.NotificationService.entity.es;
 
 import com.example.notificationService.NotificationService.constant.ElasticsearchConstants;
+import com.example.notificationService.NotificationService.constant.UtilConstants;
 import com.example.notificationService.NotificationService.entity.enums.SortByType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,7 +14,6 @@ import org.elasticsearch.search.sort.SortOrder;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Positive;
 import java.util.Date;
 
 @Data
@@ -27,11 +27,11 @@ public class EsSearchTime {
     private String phoneNumber;
 
     @JsonProperty("start_time")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = UtilConstants.DATE_TIME_PATTERN)
     private Date startTime;
 
     @JsonProperty("end_time")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = UtilConstants.DATE_TIME_PATTERN)
     private Date endTime;
 
     @Enumerated(EnumType.STRING)

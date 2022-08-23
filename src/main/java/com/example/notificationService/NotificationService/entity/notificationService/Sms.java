@@ -1,7 +1,7 @@
 package com.example.notificationService.NotificationService.entity.notificationService;
 
+import com.example.notificationService.NotificationService.constant.SmsConstants;
 import com.example.notificationService.NotificationService.entity.enums.StatusType;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,10 +18,10 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "sms_requests")
+@Entity(name = SmsConstants.TABLE_NAME)
 public class Sms {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @GeneratedValue(generator = "UUID")
@@ -55,12 +55,10 @@ public class Sms {
 
     @Column(name = "created_at")
     @CreationTimestamp
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Date createdAt;
 
     @Column(name = "updated_at")
     @UpdateTimestamp
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Date updatedAt;
 }
 

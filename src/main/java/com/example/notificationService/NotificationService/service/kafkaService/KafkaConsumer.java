@@ -6,8 +6,8 @@ import com.example.notificationService.NotificationService.entity.kafka.KafkaDat
 import com.example.notificationService.NotificationService.entity.notificationService.Sms;
 import com.example.notificationService.NotificationService.entity.imi.ImiData;
 import com.example.notificationService.NotificationService.entity.imi.ImiResponse;
-import com.example.notificationService.NotificationService.repository.EsRepository;
 import com.example.notificationService.NotificationService.service.blacklistService.BlacklistService;
+import com.example.notificationService.NotificationService.service.esService.EsService;
 import com.example.notificationService.NotificationService.service.notificationService.NotificationService;
 import com.example.notificationService.NotificationService.service.imiService.ImiService;
 import com.example.notificationService.NotificationService.transformer.EsDataTransformer;
@@ -26,11 +26,11 @@ public class KafkaConsumer {
     private final BlacklistService blacklistService;
     private final ImiService imiService;
     private final NotificationService notificationService;
-    private final EsRepository esRepository;
+    private final EsService esService;
     private final ImiDataTransformer imiDataTransformer;
     private final EsDataTransformer esDataTransformer;
 
-    @KafkaListener(topics = "notificationService", groupId = "notificationServiceGroup")
+    @KafkaListener(topics = "${kafka.topic-name}", groupId = "${spring.kafka.consumer.group-id}")
     public void consume(KafkaData kafkaData){
 
         log.info("KafkaData received is: " + kafkaData);
@@ -59,6 +59,6 @@ public class KafkaConsumer {
         //saving into ES
         EsData esData = esDataTransformer.transform(sms);
 
-        esRepository.save(esData);
+        esService.indexMessage(esData);
     }
 }

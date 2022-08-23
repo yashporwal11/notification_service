@@ -8,10 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.RestClients;
 import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "com.example.notificationService.NotificationService.repository")
 @ComponentScan(basePackages = {"com.example.notificationService.NotificationService"})
 public class EsConfig extends AbstractElasticsearchConfiguration {
 
@@ -23,6 +21,7 @@ public class EsConfig extends AbstractElasticsearchConfiguration {
     public RestHighLevelClient elasticsearchClient() {
         final ClientConfiguration config = ClientConfiguration.builder()
                 .connectedTo(elasticsearchUrl)
+                .usingSsl()
                 .build();
 
         return RestClients.create(config).rest();

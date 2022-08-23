@@ -11,8 +11,6 @@ import org.elasticsearch.search.sort.SortOrder;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 @Data
 @Builder

@@ -1,5 +1,6 @@
 package com.example.notificationService.NotificationService.service.notificationService;
 
+import com.example.notificationService.NotificationService.constant.BlacklistConstants;
 import com.example.notificationService.NotificationService.constant.ResponseConstants;
 import com.example.notificationService.NotificationService.entity.enums.StatusType;
 import com.example.notificationService.NotificationService.entity.imi.ImiResponse;
@@ -72,8 +73,8 @@ public class NotificationServiceImpl implements NotificationService {
     public void updateSmsToBlacklisted(Sms sms) {
 
         sms.setStatus(StatusType.BLACKLISTED);
-        sms.setFailureCode("1000");
-        sms.setFailureComments("phone_number is blacklisted");
+        sms.setFailureCode(BlacklistConstants.BLACKLIST_CODE);
+        sms.setFailureComments(BlacklistConstants.BLACKLIST_COMMENT);
 
         this.updateSms(sms);
     }

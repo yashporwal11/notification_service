@@ -1,5 +1,6 @@
 package com.example.notificationService.NotificationService.entity.redis;
 
+import com.example.notificationService.NotificationService.constant.BlacklistConstants;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RedisHash("PhoneNumber")
+@RedisHash(BlacklistConstants.REDIS_HASH_KEY)
 public class PhoneNumbers implements Serializable {
 
     @JsonProperty("phoneNumbers")

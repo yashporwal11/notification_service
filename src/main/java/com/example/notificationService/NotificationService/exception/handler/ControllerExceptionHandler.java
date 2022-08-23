@@ -25,7 +25,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         GenericResponse response = new GenericResponse();
         ErrorResponse error = new ErrorResponse();
         error.setCode(ErrorConstants.INTERNAL_SERVER_ERROR);
-        error.setMessage(ex.getMessage());
+        error.setMessage(ex.getLocalizedMessage());
         response.setError(error);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }

@@ -1,15 +1,16 @@
 package com.example.notificationService.NotificationService.service.esService;
 
+import com.example.notificationService.NotificationService.constant.ElasticsearchConstants;
 import com.example.notificationService.NotificationService.constant.ErrorConstants;
 import com.example.notificationService.NotificationService.entity.es.EsData;
 import com.example.notificationService.NotificationService.entity.es.EsSearchText;
 import com.example.notificationService.NotificationService.entity.es.EsSearchTime;
 import com.example.notificationService.NotificationService.exception.InvalidRequestException;
 import com.example.notificationService.NotificationService.exception.NotFoundException;
-import com.example.notificationService.NotificationService.repository.EsRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -21,8 +22,8 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.elasticsearch.xcontent.XContentType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -31,12 +32,26 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Slf4j
 public class EsService {
 
     private final ObjectMapper mapper;
     private final RestHighLevelClient restHighLevelClient;
-    @Value("${elasticsearch.index.name}")
-    private String indexName;
+    private final String indexName = ElasticsearchConstants.INDEX_NAME;
+
+    public Boolean indexMessage(EsData esData) {
+        try {
+            String messageAsString = mapper.writeValueAsString(esData);
+            IndexRequest request = new IndexRequest(ElasticsearchConstants.INDEX_NAME);
+            request.id(String.valueOf(esData.getId()));
+            request.source(messageAsString, XContentType.JSON);
+            restHighLevelClient.index(request, RequestOptions.DEFAULT);
+            return true;
+        } catch (Exception ex) {
+            log.error("Got following error while indexing sms in elasticsearch: {}", ex.getMessage(), ex);
+            return false;
+        }
+    }
 
     public int getAndValidatePageNumber(int page){
         if (page <= 0) {

@@ -21,15 +21,18 @@ public class RedisConfig {
     private String redisHostName;
     @Value("${redis.port}")
     private int redisPort;
+    @Value("${redis.password}")
+    private String redisPassword;
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(redisHostName);
         redisStandaloneConfiguration.setPort(redisPort);
+        redisStandaloneConfiguration.setPassword(redisPassword);
 
         JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisStandaloneConfiguration);
-        return  jedisConnectionFactory;
+        return jedisConnectionFactory;
     }
 
     @Bean
